@@ -14,3 +14,18 @@ class Category(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Genre(models.Model):
+    title = models.CharField(max_length=256, verbose_name='Жанр')
+    slug = models.SlugField(
+        unique=True, verbose_name='Отображение жанра',
+        max_length=50,
+    )
+
+    class Meta:
+        verbose_name = 'Жанр'
+        verbose_name_plural = 'Жанры'
+
+    def __str__(self):
+        return self.title
