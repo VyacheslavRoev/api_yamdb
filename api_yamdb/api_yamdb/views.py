@@ -1,5 +1,5 @@
-from rest_framework import viewsets, permissions, filters, mixins
-from django.shortcuts import get_object_or_404
+from rest_framework import viewsets, mixins
+#from django.shortcuts import get_object_or_404
 from rest_framework.pagination import LimitOffsetPagination
 
 from .models import Category
