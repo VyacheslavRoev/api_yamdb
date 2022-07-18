@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'api',
     'reviews',
+    'api_yamdb',
     #'django_filters',
 ]
 
