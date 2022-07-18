@@ -12,7 +12,7 @@ class CategoryViewSet(ListCreateDestroyViewSet):
     информацию о них."""
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    #permission_classes = 
+    #permission_classes =
     filter_backends = (filters.SearchFilter,)
     #filterset_fields = ('title',)
     search_fields = ('title',)
