@@ -56,6 +56,7 @@ class Title(models.Model):
         Category, verbose_name='Категория',
         on_delete=models.SET_NULL,
         related_name='categories',
+        null=True
     )
     genre = models.ManyToManyField(
         Genre, verbose_name='Жанр',
