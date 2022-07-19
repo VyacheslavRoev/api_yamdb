@@ -1,5 +1,6 @@
 from rest_framework import filters, viewsets
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.pagination import PageNumberPagination
 
 from reviews.models import Category, Genre, Title  # , Comment, Review
 from api.serializers import (CategorySerializer, GenreSerializer,
@@ -29,11 +30,14 @@ class GenreViewSet(ListCreateDestroyViewSet):
 
 
 class TitleViewSet(viewsets.ModelViewSet):
+    """Представление для произведений. Позволяет получить список произведений,
+    информацию о них."""
     queryset = Title.objects.all()
     serializer_class = TitleSerializer
     # permission_classes = (IsAdminOrReadOnly)
     filter_backends = (DjangoFilterBackend,)
     filterset_class = TitleFilter
+    pagination_class = PageNumberPagination
 
     def get_serializer_class(self):
         if self.action in ('list', 'retrieve'):
