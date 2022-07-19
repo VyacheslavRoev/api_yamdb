@@ -1,9 +1,11 @@
-from rest_framework import filters
+from rest_framework import filters, viewsets
 #from django.shortcuts import get_object_or_404
 from rest_framework.pagination import LimitOffsetPagination
+from django_filters.rest_framework import DjangoFilterBackend
 
-from reviews.models import Category, Genre
-from api.serializers import CategorySerializer, GenreSerializer
+from reviews.models import Category, Genre, Title
+from api.serializers import (CategorySerializer, GenreSerializer,
+                             TitleSerializer)
 from api.mixins import ListCreateDestroyViewSet
 
 
@@ -14,8 +16,8 @@ class CategoryViewSet(ListCreateDestroyViewSet):
     serializer_class = CategorySerializer
     #permission_classes =
     filter_backends = (filters.SearchFilter,)
-    #filterset_fields = ('title',)
-    search_fields = ('title',)
+    #filterset_fields = ('name',)
+    search_fields = ('name',)
     pagination_class = LimitOffsetPagination
 
 
@@ -26,6 +28,19 @@ class GenreViewSet(ListCreateDestroyViewSet):
     serializer_class = GenreSerializer
     #permission_classes =
     filter_backends = (filters.SearchFilter,)
-    #filterset_fields = ('title',)
-    search_fields = ('title',)
+    #filterset_fields = ('name',)
+    search_fields = ('name',)
     pagination_class = LimitOffsetPagination
+
+
+class TitleViewSet(viewsets.ModelViewSet):
+    queryset = Title.objects.all()
+    serializer_class = TitleSerializer
+    #permission_classes = [IsAdminOrReadOnly]
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = TitleFilter
+
+    # def get_serializer_class(self):
+    #     if self.action in ['list', 'retrieve']:
+    #         return TitleSerializerList
+    #     return TitleSerializer
