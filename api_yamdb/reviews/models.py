@@ -6,6 +6,7 @@ from django.forms import ValidationError
 
 User = get_user_model()
 
+
 class Category(models.Model):
     name = models.CharField(max_length=256, verbose_name='Название категории')
     slug = models.SlugField(
@@ -58,7 +59,7 @@ class Title(models.Model):
         Category, verbose_name='Категория',
         on_delete=models.SET_NULL,
         related_name='categories',
-        null=True
+        null=True, blank=True
     )
     genre = models.ManyToManyField(
         Genre, verbose_name='Жанр',
