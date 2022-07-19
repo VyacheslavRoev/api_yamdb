@@ -1,9 +1,11 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import filters, viewsets
 from django_filters.rest_framework import DjangoFilterBackend
 
-from reviews.models import Category, Genre, Title  # , Comment, Review
+from reviews.models import Category, Genre, Title, Review
 from api.serializers import (CategorySerializer, GenreSerializer,
-                             TitleSerializer, TitleReadOnlySerializer)
+                             TitleSerializer, TitleReadOnlySerializer,
+                             ReviewSerializer, CommentSerializer)
 from api.mixins import ListCreateDestroyViewSet
 from api.filters import TitleFilter
 
@@ -39,3 +41,21 @@ class TitleViewSet(viewsets.ModelViewSet):
         if self.action in ('list', 'retrieve'):
             return TitleReadOnlySerializer
         return TitleSerializer
+
+
+class ReviewViewSet(viewsets.ModelViewSet):
+    serializer_class = ReviewSerializer
+
+    def get_queryset(self):
+        title_id = self.kwargs.get('title_id')
+        title = get_object_or_404(Title, pk=title_id)
+        return title.reviews.all()
+
+class CommentViewSet(viewsets.ModelViewSet):
+    serializer_class = CommentSerializer
+
+    def get_queryset(self):
+        review_id = self.kwargs.get('review_id')
+        review = get_object_or_404(Review, pk=review_id)
+        return review.comments.all()
+
