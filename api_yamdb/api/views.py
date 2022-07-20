@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework import filters, viewsets
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import PageNumberPagination
+from api.permissions import ReviewCommentPermissions
 
 from reviews.models import Category, Genre, Title, Review
 from api.serializers import (CategorySerializer, GenreSerializer,
@@ -49,6 +50,8 @@ class TitleViewSet(viewsets.ModelViewSet):
 
 class ReviewViewSet(viewsets.ModelViewSet):
     serializer_class = ReviewSerializer
+    pagination_class = PageNumberPagination
+    permission_classes = (ReviewCommentPermissions, )
 
     def get_queryset(self):
         title_id = self.kwargs.get('title_id')
@@ -57,6 +60,8 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
 class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
+    pagination_class = PageNumberPagination
+    permission_classes = (ReviewCommentPermissions, )
 
     def get_queryset(self):
         review_id = self.kwargs.get('review_id')
