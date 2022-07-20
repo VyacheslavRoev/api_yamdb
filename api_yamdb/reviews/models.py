@@ -74,6 +74,10 @@ class Title(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name = 'Произведение'
+        verbose_name_plural = 'Произведения'
+
 
 class TitleGenre(models.Model):
     title = models.ForeignKey(
