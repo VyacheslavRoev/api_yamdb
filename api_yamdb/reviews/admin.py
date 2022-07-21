@@ -50,9 +50,8 @@ class TitleAdmin(admin.ModelAdmin):
         'name',
         'year',
         'description',
-        'category'
-        'genre'
-        'rating'
+        'category',
+        'rating',
     )
     search_fields = ('name',)
     list_filter = ('year',)
@@ -75,7 +74,7 @@ class ReviewAdmin(admin.ModelAdmin):
         'text',
         'author',
         'score',
-        'pub_date'
+        'pub_date',
     )
     search_fields = ('author',)
     list_filter = ('pub_date',)
@@ -87,7 +86,7 @@ class CommentAdmin(admin.ModelAdmin):
         'review',
         'text',
         'author',
-        'pub_date'
+        'pub_date',
     )
     search_fields = ('author',)
     list_filter = ('pub_date',)

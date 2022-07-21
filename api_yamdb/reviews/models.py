@@ -62,6 +62,13 @@ class User(AbstractUser):
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
 
+        constraints = [
+            models.CheckConstraint(
+                check=~models.Q(username__iexact='me'),
+                name='username_cant_be_me'
+            )
+        ]
+
 
 class Category(models.Model):
     name = models.CharField(max_length=256, verbose_name='Название категории')
@@ -129,6 +136,10 @@ class Title(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        verbose_name = 'Произведение'
+        verbose_name_plural = 'Произведения'
 
 
 class TitleGenre(models.Model):
