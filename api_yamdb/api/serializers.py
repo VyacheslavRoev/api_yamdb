@@ -57,7 +57,7 @@ class ReviewSerializer(serializers.ModelSerializer):
                 fields=('author', 'title'),
                 message=('Нельзя оценивать одно произведение 2 раза!')
             ),
-        )
+        ) 
 
 
 class CommentSerializer(serializers.ModelSerializer):
