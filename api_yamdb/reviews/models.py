@@ -223,3 +223,4 @@ class Comment(models.Model):
         verbose_name = 'Комментарии'
         verbose_name_plural = 'Комментарии'
         ordering = ['pub_date']
+

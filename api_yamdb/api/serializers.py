@@ -1,3 +1,5 @@
+from django.forms import ValidationError
+from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator, UniqueValidator
 from reviews.models import Category, Genre, Title, Comment, Review, User
@@ -49,16 +51,21 @@ class ReviewSerializer(serializers.ModelSerializer):
         default=serializers.CurrentUserDefault()
     )
 
+    def validate(self, data):
+        request = self.context['request']
+        author = request.user
+        title_id = self.context['view'].kwargs.get('title_id')
+        title = get_object_or_404(Title, pk=title_id)
+        if request.method == 'POST':
+            if Review.objects.filter(title=title, author=author).exists():
+                raise ValidationError(
+                    'Нельзя оценивать одно произведение 2 раза!'
+                )
+        return data
+
     class Meta:
         model = Review
-        fields = ('title', 'text', 'author', 'pub_date')
-        validators = (
-            UniqueTogetherValidator(
-                queryset=Review.objects.all(),
-                fields=('author', 'title'),
-                message=('Нельзя оценивать одно произведение 2 раза!')
-            ),
-        )
+        fields = '__all__'
 
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -73,7 +80,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ('text', 'author', 'pub_date')
+        fields = '__all__'
 
 
 class UserSerializer(serializers.ModelSerializer):
