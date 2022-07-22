@@ -1,10 +1,73 @@
 from django.db import models
-import datetime
+from django.utils import timezone
 from django.core.validators import MinValueValidator, MaxValueValidator
-from django.contrib.auth import get_user_model
+from django.contrib.auth.models import AbstractUser
 from django.forms import ValidationError
 
-User = get_user_model()
+
+class User(AbstractUser):
+    USER = 'user'
+    MODERATOR = 'moderator'
+    ADMIN = 'admin'
+    ROLES = [
+        (USER, 'User'),
+        (MODERATOR, 'Moderator'),
+        (ADMIN, 'Administrator'),
+    ]
+    username = models.CharField(
+        verbose_name='Имя пользователя',
+        max_length=150,
+        null=True,
+        unique=True
+    )
+    email = models.EmailField(
+        verbose_name='Адрес электронной почты',
+        unique=True,
+    )
+    role = models.CharField(
+        verbose_name='Роль',
+        max_length=50,
+        choices=ROLES,
+        default=USER
+    )
+    first_name = models.CharField(
+        verbose_name='Имя',
+        max_length=50,
+        null=True,
+    )
+    last_name = models.CharField(
+        verbose_name='Фамилия',
+        max_length=50,
+        null=True,
+    )
+    bio = models.TextField(
+        verbose_name='О себе',
+        null=True,
+        blank=True,
+    )
+
+    @property
+    def is_moderator(self):
+        return self.role == self.MODERATOR
+
+    @property
+    def is_admin(self):
+        return self.role == self.ADMIN
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username']
+
+    class Meta:
+        ordering = ['id']
+        verbose_name = 'Пользователь'
+        verbose_name_plural = 'Пользователи'
+
+        constraints = [
+            models.CheckConstraint(
+                check=~models.Q(username__iexact='me'),
+                name='username_cant_be_me'
+            )
+        ]
 
 
 class Category(models.Model):
@@ -38,7 +101,7 @@ class Genre(models.Model):
 
 
 def validate_year(year):
-    if year > datetime.date.year():
+    if year > timezone.now().year:
         raise ValidationError(
             (f'Год выпуска {year} больше текущего!'),
             params={'year': year},
@@ -58,7 +121,7 @@ class Title(models.Model):
     category = models.ForeignKey(
         Category, verbose_name='Категория',
         on_delete=models.SET_NULL,
-        related_name='categories',
+        related_name='titles',
         null=True, blank=True
     )
     genre = models.ManyToManyField(
@@ -73,6 +136,10 @@ class Title(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        verbose_name = 'Произведение'
+        verbose_name_plural = 'Произведения'
 
 
 class TitleGenre(models.Model):
@@ -156,3 +223,4 @@ class Comment(models.Model):
         verbose_name = 'Комментарии'
         verbose_name_plural = 'Комментарии'
         ordering = ['pub_date']
+
