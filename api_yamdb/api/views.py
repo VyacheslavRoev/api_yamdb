@@ -59,6 +59,8 @@ class TitleViewSet(viewsets.ModelViewSet):
 
 
 class ReviewViewSet(viewsets.ModelViewSet):
+    """Представление для отзывов. Позволяет получить список отзывов к произведениям,
+    информацию о них."""
     serializer_class = ReviewSerializer
     pagination_class = PageNumberPagination
     permission_classes = (ReviewCommentPermissions, )
@@ -75,6 +77,8 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
 
 class CommentViewSet(viewsets.ModelViewSet):
+    """Представление для комментариев. Позволяет получить список комментариев к отзывам,
+    информацию о них."""
     serializer_class = CommentSerializer
     pagination_class = PageNumberPagination
     permission_classes = (ReviewCommentPermissions, )
