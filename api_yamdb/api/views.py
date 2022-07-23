@@ -98,6 +98,11 @@ class CommentViewSet(viewsets.ModelViewSet):
 
 
 class UserViewSet(viewsets.ModelViewSet):
+    """
+    Представление для пользователей.
+    Позволяет получить список пользователей,
+    информацию о них.
+    """
     lookup_field = 'username'
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -112,6 +117,10 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer_class=UserEditSerializer,
     )
     def own_profile(self, request):
+        """
+        Функция для получения и редактирования данных
+        по имени пользователя.
+        """
         user = request.user
         if request.method == 'GET':
             serializer = self.get_serializer(user)
@@ -131,6 +140,10 @@ class UserViewSet(viewsets.ModelViewSet):
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])
 def registration(request):
+    """
+    View-функция для добавления новго пользователя
+    и отправки ему письма с кодом подтверрждения.
+    """
     serializer = RegistrationDataSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
     serializer.save()
@@ -151,6 +164,11 @@ def registration(request):
 @api_view(['POST'])
 @permission_classes([permissions.AllowAny])
 def get_jwt_token(request):
+    """
+    View-функция для выдачи JWT-токена
+    по имени пользователя и направленному ему
+    коду подтверрждения.
+    """
     serializer = TokenSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
     user = get_object_or_404(
