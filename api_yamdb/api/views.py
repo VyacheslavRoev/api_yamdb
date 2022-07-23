@@ -119,7 +119,7 @@ class UserViewSet(viewsets.ModelViewSet):
     def own_profile(self, request):
         """
         Функция для получения и редактирования данных
-        по имени пользователя
+        по имени пользователя.
         """
         user = request.user
         if request.method == 'GET':
