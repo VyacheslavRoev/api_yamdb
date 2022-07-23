@@ -9,6 +9,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
 from api.permissions import (ReviewCommentPermissions,
                              IsAdmin, IsAdminOrReadOnly)
+from django.db.models import Avg
 
 from reviews.models import Category, Genre, Title, Review, User
 from api.serializers import (CategorySerializer, GenreSerializer,
@@ -45,7 +46,7 @@ class GenreViewSet(ListCreateDestroyViewSet):
 class TitleViewSet(viewsets.ModelViewSet):
     """Представление для произведений. Позволяет получить список произведений,
     информацию о них."""
-    queryset = Title.objects.all()
+    queryset = Title.objects.all().annotate(rating=Avg('reviews__score'))
     serializer_class = TitleSerializer
     permission_classes = (IsAdminOrReadOnly,)
     filter_backends = (DjangoFilterBackend,)
@@ -59,7 +60,8 @@ class TitleViewSet(viewsets.ModelViewSet):
 
 
 class ReviewViewSet(viewsets.ModelViewSet):
-    """Представление для отзывов. Позволяет получить список отзывов к произведениям,
+    """Представление для отзывов.
+    Позволяет получить список отзывов к произведениям,
     информацию о них."""
     serializer_class = ReviewSerializer
     pagination_class = PageNumberPagination
@@ -77,7 +79,8 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
 
 class CommentViewSet(viewsets.ModelViewSet):
-    """Представление для комментариев. Позволяет получить список комментариев к отзывам,
+    """Представление для комментариев.
+    Позволяет получить список комментариев к отзывам,
     информацию о них."""
     serializer_class = CommentSerializer
     pagination_class = PageNumberPagination
@@ -88,7 +91,7 @@ class CommentViewSet(viewsets.ModelViewSet):
         review = get_object_or_404(Review, id=review_id)
         return review.comments.all()
 
-    def perform_create(self,serializer):
+    def perform_create(self, serializer):
         review_id = self.kwargs.get('review_id')
         review = get_object_or_404(Review, id=review_id)
         serializer.save(author=self.request.user, review=review)

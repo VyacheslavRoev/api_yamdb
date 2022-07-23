@@ -128,11 +128,6 @@ class Title(models.Model):
         Genre, verbose_name='Жанр',
         through='TitleGenre',
     )
-    rating = models.IntegerField(
-        verbose_name='Рейтинг',
-        null=True,
-        default=None
-    )
 
     def __str__(self):
         return self.name
@@ -223,4 +218,3 @@ class Comment(models.Model):
         verbose_name = 'Комментарии'
         verbose_name_plural = 'Комментарии'
         ordering = ['pub_date']
-
