@@ -6,12 +6,12 @@ from reviews.models import Category, Genre, Title, TitleGenre, Comment, Review, 
 
 DICT = {
     Category: 'category.csv',
-    Comment: 'comments.csv',
-    TitleGenre: 'genre_title.csv',
     Genre: 'genre.csv',
-    Review: 'review.csv',
     Title: 'titles.csv',
-    User: 'users.csv'
+    User: 'users.csv',
+    Review: 'review.csv',
+    Comment: 'comments.csv',
+    TitleGenre: 'genre_title.csv'
 }
 
 
@@ -23,9 +23,10 @@ class Command(BaseCommand):
             with open(f'{settings.BASE_DIR}/static/data/{file}', 'r',
                       encoding='utf-8') as csv_file:
                 data_reader = csv.DictReader(csv_file, delimiter=",")
+
                 for row in data_reader:
-                    print(row)
-                    #model.objects.bulk_create(model(**data) for data in data_reader)
+                    #print(row)
+                    model.objects.bulk_create(model(**data) for data in data_reader)
         self.stdout.write("Команда выполнена")
 
 
