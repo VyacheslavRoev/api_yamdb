@@ -60,5 +60,279 @@ python manage.py migrate
 python manage.py runserver
 ```
 
-### Документация к API доступна после запуска проекта
+## Примеры запросов:
+### Регистрация нового пользователя
+```
+Получить код подтверждения на переданный email.
+
+Использовать имя 'me' в качестве username запрещено.
+
+Поля email и username должны быть уникальными.
+```
+```
+POST    /api/v1/auth/signup/
+```
+```
+{
+  "email": "string",
+  "username": "string"
+}
+```
+
+Ответ:
+```
+{
+  "email": "string",
+  "username": "string"
+}
+```
+
+### Получение JWT-токена
+```
+POST    /api/v1/auth/token/
+```
+```
+{
+  "username": "string",
+  "confirmation_code": "string"
+}
+```
+
+Ответ:
+```
+{
+  "token": "string"
+}
+```
+
+### Получение списка всех категорий
+```
+GET    /api/v1/categories/
+```
+
+Ответ:
+```
+[
+  {
+    "count": 0,
+    "next": "string",
+    "previous": "string",
+    "results": [
+      {
+        "name": "string",
+        "slug": "string"
+      }
+    ]
+  }
+]
+```
+
+### Добавление новой категории (Права доступа: Администратор)
+```
+POST    /api/v1/categories/
+```
+```
+{
+  "name": "string",
+  "slug": "string"
+}
+```
+
+Ответ:
+```
+{
+  "name": "string",
+  "slug": "string"
+}
+```
+
+### Добавление произведения
+```
+Права доступа: Администратор.
+
+Нельзя добавлять произведения, которые еще не вышли (год выпуска не может быть больше текущего).
+
+При добавлении нового произведения требуется указать уже существующие категорию и жанр.
+```
+```
+POST    /api/v1/titles/
+```
+```
+{
+  "name": "string",
+  "year": 0,
+  "description": "string",
+  "genre": [
+    "string"
+  ],
+  "category": "string"
+}
+```
+
+Ответ:
+```
+{
+  "id": 0,
+  "name": "string",
+  "year": 0,
+  "rating": 0,
+  "description": "string",
+  "genre": [
+    {
+      "name": "string",
+      "slug": "string"
+    }
+  ],
+  "category": {
+    "name": "string",
+    "slug": "string"
+  }
+}
+```
+### Получение информации о произведении
+```
+GET    /api/v1/titles/{titles_id}/
+```
+
+Ответ:
+```
+{
+  "id": 0,
+  "name": "string",
+  "year": 0,
+  "rating": 0,
+  "description": "string",
+  "genre": [
+    {
+      "name": "string",
+      "slug": "string"
+    }
+  ],
+  "category": {
+    "name": "string",
+    "slug": "string"
+  }
+}
+```
+
+### Полуение отзыва по id
+```
+GET    /api/v1/titles/{title_id}/reviews/{review_id}/
+```
+
+Ответ:
+```
+{
+  "id": 0,
+  "text": "string",
+  "author": "string",
+  "score": 1,
+  "pub_date": "2019-08-24T14:15:22Z"
+}
+```
+
+### Частичное обновление отзыва по id
+```
+Права доступа: Автор отзыва, модератор или администратор.
+```
+```
+PATCH   /api/v1/titles/{title_id}/reviews/{review_id}/
+```
+```
+{
+  "text": "string",
+  "score": 1
+}
+```
+
+Ответ:
+```
+{
+  "id": 0,
+  "text": "string",
+  "author": "string",
+  "score": 1,
+  "pub_date": "2019-08-24T14:15:22Z"
+}
+```
+
+### Получение комментария к отзыву
+```
+GET    /api/v1/titles/{title_id}/reviews/{review_id}/comments/{comment_id}/
+```
+
+Ответ:
+```
+{
+  "id": 0,
+  "text": "string",
+  "author": "string",
+  "pub_date": "2019-08-24T14:15:22Z"
+}
+```
+### Получение списка всех пользователей
+```
+Права доступа: Администратор
+```
+```
+GET    /api/v1/users/
+```
+
+Ответ:
+```
+[
+  {
+    "count": 0,
+    "next": "string",
+    "previous": "string",
+    "results": [
+      {
+        "username": "string",
+        "email": "user@example.com",
+        "first_name": "string",
+        "last_name": "string",
+        "bio": "string",
+        "role": "user"
+      }
+    ]
+  }
+]
+```
+### Изменение данных своей учетной записи
+```
+Права доступа: Любой авторизованный пользователь
+
+Поля email и username должны быть уникальными.
+```
+```
+PATCH    /api/v1/users/me/
+```
+```
+{
+  "username": "string",
+  "email": "user@example.com",
+  "first_name": "string",
+  "last_name": "string",
+  "bio": "string"
+}
+```
+
+Ответ:
+```
+{
+  "username": "string",
+  "email": "user@example.com",
+  "first_name": "string",
+  "last_name": "string",
+  "bio": "string",
+  "role": "user"
+}
+```
+
+### Подробная документация к API доступна после запуска проекта
 http://127.0.0.1:8000/redoc/
+
+### Над проектом работали:
+- [Цветков Никита](https://github.com/NikitaTsvetkov1990): управление пользователями (Auth и Users): система регистрации и аутентификации, права доступа, работа с токеном, система подтверждения через e-mail.
++ [Причко Надежда](https://github.com/NadyaMerlion): категории (Categories), жанры (Genres) и произведения (Titles): модели, представления и эндпойнты для них.
++ [Роев Вячеслав](https://github.com/VyacheslavRoev): отзывы (Review) и комментариями (Comments): модели, представления, эндпойнты, права доступа для запросов. Рейтинги произведений.
