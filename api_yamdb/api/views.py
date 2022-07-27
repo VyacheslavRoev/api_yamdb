@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import filters, viewsets, permissions, status
 from django_filters.rest_framework import DjangoFilterBackend
+from django.db.models import Avg
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework_simplejwt.tokens import AccessToken
@@ -9,7 +10,6 @@ from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
 from api.permissions import (ReviewCommentPermissions,
                              IsAdmin, IsAdminOrReadOnly)
-from django.db.models import Avg
 
 from reviews.models import Category, Genre, Title, Review, User
 from api.serializers import (CategorySerializer, GenreSerializer,
@@ -46,7 +46,8 @@ class GenreViewSet(ListCreateDestroyViewSet):
 class TitleViewSet(viewsets.ModelViewSet):
     """Представление для произведений. Позволяет получить список произведений,
     информацию о них."""
-    queryset = Title.objects.all().annotate(rating=Avg('reviews__score'))
+    queryset = Title.objects.all().annotate(rating=Avg('reviews__score'
+                                                       )).order_by('name')
     serializer_class = TitleSerializer
     permission_classes = (IsAdminOrReadOnly,)
     filter_backends = (DjangoFilterBackend,)

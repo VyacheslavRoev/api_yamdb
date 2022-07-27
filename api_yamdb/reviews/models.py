@@ -1,8 +1,7 @@
 from django.db import models
-from django.utils import timezone
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import AbstractUser
-from django.forms import ValidationError
+from reviews.utils import validate_year
 
 
 class User(AbstractUser):
@@ -98,14 +97,6 @@ class Genre(models.Model):
 
     def __str__(self):
         return self.name
-
-
-def validate_year(year):
-    if year > timezone.now().year:
-        raise ValidationError(
-            (f'Год выпуска {year} больше текущего!'),
-            params={'year': year},
-        )
 
 
 class Title(models.Model):
