@@ -18,7 +18,7 @@ from rest_framework.routers import DefaultRouter
 
 from api.views import (CategoryViewSet, GenreViewSet, TitleViewSet,
                        ReviewViewSet, CommentViewSet)
-from auth_and_users.views import (UserViewSet, registration, get_jwt_token)
+from custom_auth.views import (UserViewSet, registration, get_jwt_token)
 
 router_v1 = DefaultRouter()
 router_v1.register('categories', CategoryViewSet, basename='categories')
