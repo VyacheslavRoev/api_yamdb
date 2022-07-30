@@ -7,8 +7,8 @@ from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework_simplejwt.tokens import AccessToken
 from rest_framework.response import Response
 from reviews.models import User
-from auth_and_users.permissions import (IsAdmin)
-from auth_and_users.serializers import (
+from custom_auth.permissions import IsAdmin
+from custom_auth.serializers import (
     UserSerializer,
     UserEditSerializer,
     RegistrationDataSerializer,
