@@ -45,6 +45,7 @@ class TitleViewSet(viewsets.ModelViewSet):
     filter_backends = (DjangoFilterBackend,)
     filterset_class = TitleFilter
     pagination_class = PageNumberPagination
+    ordering_fields = ('name')
 
     def get_serializer_class(self):
         if self.action in ('list', 'retrieve'):
