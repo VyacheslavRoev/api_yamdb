@@ -46,8 +46,8 @@ class GenreViewSet(ListCreateDestroyViewSet):
 class TitleViewSet(viewsets.ModelViewSet):
     """Представление для произведений. Позволяет получить список произведений,
     информацию о них."""
-    queryset = Title.objects.all().annotate(rating=Avg('reviews__score'
-                                                       )).order_by('name')
+    queryset = Title.objects.all().annotate(
+        rating=Avg('reviews__score')).order_by('name')
     serializer_class = TitleSerializer
     permission_classes = (IsAdminOrReadOnly,)
     filter_backends = (DjangoFilterBackend,)
