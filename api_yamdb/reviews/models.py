@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import AbstractUser
+from django.shortcuts import get_object_or_404
 from reviews.utils import validate_year
 
 
@@ -144,6 +145,16 @@ class TitleGenre(models.Model):
     class Meta:
         verbose_name = 'Произведение и жанр'
         verbose_name_plural = 'Произведения и жанры'
+
+
+class TitleDefault:
+    requires_context = True
+
+    def __call__(self, serializer_field):
+        view = serializer_field.context['view']
+        title_id = view.kwargs.get('title_id')
+        title = get_object_or_404(Title, pk=title_id)
+        return title
 
 
 class Review(models.Model):

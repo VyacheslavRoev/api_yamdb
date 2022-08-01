@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
-from .tltle_default import CustomTitleDefault
+from reviews.models import TitleDefault
 from reviews.models import Category, Genre, Title, Comment, Review
 
 
@@ -46,7 +46,7 @@ class TitleReadOnlySerializer(serializers.ModelSerializer):
 
 class ReviewSerializer(serializers.ModelSerializer):
     title = serializers.HiddenField(
-        default=CustomTitleDefault()
+        default=TitleDefault()
     )
     author = serializers.SlugRelatedField(
         read_only=True,
