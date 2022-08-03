@@ -3,8 +3,8 @@ from rest_framework import filters, viewsets
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Avg
 from rest_framework.pagination import PageNumberPagination
-from api.permissions import (ReviewCommentPermissions, IsAdminOrReadOnly)
 
+from api.permissions import (ReviewCommentPermissions, IsAdminOrReadOnly)
 from reviews.models import Category, Genre, Title, Review
 from api.serializers import (CategorySerializer, GenreSerializer,
                              TitleSerializer, TitleReadOnlySerializer,
